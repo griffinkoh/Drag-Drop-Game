@@ -1,0 +1,389 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #020617;
+  color: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Ubuntu, sans-serif;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.game-root {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* =========================
+   OPTIONS PANEL (LEFT)
+========================= */
+
+.options-panel {
+  width: 260px;
+  background: linear-gradient(180deg, #020617, #020617);
+  border-right: 1px solid #1e293b;
+  padding: 18px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.options-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  color: #94a3b8;
+  margin-bottom: 18px;
+}
+
+.options-list {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+/* Scrollbar */
+.options-list::-webkit-scrollbar {
+  width: 6px;
+}
+.options-list::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 6px;
+}
+
+/* Option pill */
+.option {
+  padding: 8px 12px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: grab;
+  user-select: none;
+}
+
+.option:hover {
+  background: #1e293b;
+}
+
+.option:active {
+  cursor: grabbing;
+}
+
+/* =========================
+   MAP SECTION
+========================= */
+
+.map-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #020617;
+}
+
+/* =========================
+   MAP HEADER (TOP BAR)
+========================= */
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 26px;
+  background: linear-gradient(180deg, #020617, #020617);
+  border-bottom: 1px solid #1e293b;
+}
+
+/* Timer pill */
+.map-timer {
+  font-size: 14px;            
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 8px 22px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  color: black;
+  background-color: white;
+}
+
+
+/* Finish button */
+.map-finish {
+  padding: 8px 22px;
+  border: 2px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+
+.map-finish:hover {
+  background: linear-gradient(135deg,  #00ff5e);
+  color: white;
+  box-shadow:
+    0 10px 26px rgba(37, 99, 235, 0.6),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+
+.map-finish:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.4),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+
+/* =========================
+   MAP CANVAS
+========================= */
+
+.map-canvas {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 26px; 
+  background: #020617;
+  overflow: hidden;
+}
+
+/* Frame that defines map bounds */
+.map-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: inline-block
+}
+
+/* Map image */
+.map-image {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+
+/* =========================
+   DROP ZONES (INVISIBLE)
+========================= */
+
+.zone-hitbox {
+  background: transparent;
+  pointer-events: auto;
+  outline: 2px dashed rgba(0,255,0,0.6);
+
+}
+
+/* =========================
+   PLACED LABELS (BEAUTIFUL)
+========================= */
+
+.zone-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.zone-pill {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  pointer-events: none; /* 🔥 important */
+}
+
+
+/* Incorrect answer (after Finish) */
+.zone-wrong {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+/* =========================
+   START SCREEN
+========================= */
+
+.start-screen {
+  height: 100vh;
+  background: radial-gradient(circle at top, #020617, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 40px 48px;
+  width: 90%;
+  max-width: 520px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.start-card h1 {
+  margin-bottom: 16px;
+  font-size: 28px;
+}
+
+.start-card p {
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
+.primary-btn {
+  padding: 12px 24px;
+  width: 100%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* =========================
+   RESULT MODAL
+========================= */
+
+.result-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.result-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 32px 40px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.result-card h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.result-row,
+.result-final {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  font-size: 15px;
+}
+
+.result-divider {
+  height: 1px;
+  background: #1e293b;
+  margin: 20px 0;
+}
+
+.result-final {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* =========================
+   Clear Items
+========================= */
+
+
+.map-clear {
+  padding: 8px 22px;
+  color: black;
+  border: 2px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.map-clear:hover {
+  background: linear-gradient(135deg, #ff392b);
+}
+
+.map-clear:active {
+  transform: translateY(1px);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .options-panel {
+    width: 200px;
+  }
+}
+
+@media (max-width: 700px) {
+  .game-root {
+    flex-direction: column;
+  }
+
+  .options-panel {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #1e293b;
+  }
+}
