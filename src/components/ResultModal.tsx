@@ -39,7 +39,7 @@ export default function ResultModal({
           <span>{finalTime}s</span>
         </div>
 
-        <button className="primary-btn" style={{marginBottom: "20px"}} onClick={onAction}>
+        <button className="primary-btn" style={{marginTop: "20px"}} onClick={onAction}>
           {actionLabel}
         </button>
       </div>
