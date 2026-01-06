@@ -21,10 +21,10 @@ export const ANSWERS = {
   B469: "B469",
 
   // WSD / WMD 
-  WMD21: "WMD21",
+  WSD21: "WSD21",
   WMD20: "WMD20",
   WMD12: "WMD12",
-  WSD13: "WSD13",
+  D13: "D13",
   WSD44: "WSD44",
   WSD45: "WSD45",
   WMD8: "WMD8",

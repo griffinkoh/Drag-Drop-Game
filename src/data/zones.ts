@@ -23,10 +23,10 @@ export const ZONES = [
   { id: "B470", leftPct: 0.75, topPct: 0.848, widthPct: 0.053, heightPct: 0.055 },
 
   // ===== ORANGE ARROWS WSD / WMD =====
-  { id: "WMD21", leftPct: 0.763, topPct: 0.32, widthPct: 0.055, heightPct: 0.12 },
+  { id: "WSD21", leftPct: 0.763, topPct: 0.32, widthPct: 0.055, heightPct: 0.12 },
   { id: "WMD20", leftPct: 0.825, topPct: 0.32, widthPct: 0.055, heightPct: 0.12 },
   { id: "WMD12", leftPct: 0.763, topPct: 0.452, widthPct: 0.056, heightPct: 0.121 },
-  { id: "WSD13", leftPct: 0.825, topPct: 0.452, widthPct: 0.053, heightPct: 0.121 },
+  { id: "D13", leftPct: 0.825, topPct: 0.452, widthPct: 0.053, heightPct: 0.121 },
   { id: "WSD44", leftPct: 0.89, topPct: 0.452, widthPct: 0.064, heightPct: 0.123 },
   { id: "WSD45", leftPct: 0.961, topPct: 0.452, widthPct: 0.064, heightPct: 0.121 },
   { id: "WMD8", leftPct: 0.768, topPct: 0.586, widthPct: 0.046, heightPct: 0.126 },

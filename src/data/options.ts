@@ -23,11 +23,11 @@ export const OPTIONS: OptionItem[] = [
   { id: "B469", label: "B469" },
 
   // WSD / WMD
-  { id: "WMD21", label: "WMD21" },
+  { id: "WSD21", label: "WSD21" },
   { id: "WMD20", label: "WMD20" },
   { id: "WMD12", label: "WMD12" },
   { id: "WMD8", label: "WMD8" },
-  { id: "WSD13", label: "WSD13" },
+  { id: "D13", label: "D13" },
   { id: "WSD14", label: "WSD14" },
   { id: "WSD15", label: "WSD15" },
   { id: "WSD44", label: "WSD44" },
