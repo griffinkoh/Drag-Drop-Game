@@ -35,6 +35,9 @@ body {
   padding: 18px 12px 12px 12px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 9999;
+  pointer-events: auto
 }
 
 .options-title {
@@ -55,6 +58,8 @@ body {
   padding-right: 4px;
 }
 
+.options-list, .option { pointer-events: auto; }
+
 /* Scrollbar */
 .options-list::-webkit-scrollbar {
   width: 6px;
@@ -67,15 +72,26 @@ body {
 /* Option pill */
 .option {
   padding: 8px 12px;
-  background: #0f172a;
-  border: 1px solid #1e293b;
   border-radius: 8px;
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  cursor: grab;
   user-select: none;
 }
+
+.option-enabled{
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  cursor: grab;
+}
+
+.option-disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed;
+  background: #020617;
+  border: 1px dashed #334155;
+}
+
 
 .option:hover {
   background: #1e293b;
@@ -92,6 +108,7 @@ body {
 .map-section {
   flex: 1;
   display: flex;
+  height:100vh;
   flex-direction: column;
   overflow: hidden;
   background: #020617;
@@ -108,6 +125,11 @@ body {
   padding: 12px 26px;
   background: linear-gradient(180deg, #020617, #020617);
   border-bottom: 1px solid #1e293b;
+}
+
+.review-title{
+  font-weight: bold;
+  font-size: 16px;
 }
 
 /* Timer pill */
@@ -128,7 +150,7 @@ body {
   padding: 8px 22px;
   border: 2px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.8px;
   cursor: pointer;
@@ -137,11 +159,9 @@ body {
 
 
 .map-finish:hover {
-  background: linear-gradient(135deg,  #00ff5e);
+  background: linear-gradient(135deg,  #24e86c);
   color: white;
-  box-shadow:
-    0 10px 26px rgba(37, 99, 235, 0.6),
-    inset 0 1px 0 rgba(255,255,255,0.2);
+
 }
 
 
@@ -165,14 +185,18 @@ body {
   padding: 26px; 
   background: #020617;
   overflow: hidden;
+  min-height: 0;
 }
 
 /* Frame that defines map bounds */
 .map-frame {
   position: relative;
-  width: 100%;
   height: 100%;
-  display: inline-block
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Map image */
@@ -181,6 +205,9 @@ body {
   height: 100%;
   pointer-events: none;
   user-select: none;
+  object-fit: fill;
+  -webkit-user-drag: none;
+  
 }
 
 
@@ -192,27 +219,22 @@ body {
   background: transparent;
   pointer-events: auto;
   outline: 2px dashed rgba(0,255,0,0.6);
-
+  z-index: 5;
+  font-size: clamp(10px, .7vw, 14px);
 }
 
-/* =========================
-   PLACED LABELS (BEAUTIFUL)
-========================= */
-
-.zone-label {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.95);
-  color: #0f172a;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  pointer-events: none;
+@keyframes snapIn {
+  0% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 .zone-pill {
@@ -221,20 +243,48 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   color: #0f172a;
-  font-size: 13px;
+  font-size: 1em;
   font-weight: 700;
   letter-spacing: 0.3px;
-  white-space: nowrap;
-  pointer-events: none; /* 🔥 important */
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  z-index: 10;
+  transition: opacity 0.12s ease;
+  animation: snapIn 0.18s ease-out;
+  text-align: center;
 }
 
+.zone-pill:active{
+  cursor: grabbing;
+}
+
+.zone-result{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
 
 /* Incorrect answer (after Finish) */
 .zone-wrong {
   background: #fee2e2;
   color: #991b1b;
-  border: 1px solid #ef4444;
+  border: 2px solid #ef4444;
 }
+
+.zone-correct {
+  background: #dcfce7;
+  color: #065f46;
+  border: 2px solid #22c55e;
+}
+
+.zone-correct-orange {
+  background: #ffedd5;
+  color: #9a3412;
+  border: 2px solid #fb923c;
+}
+
 
 /* =========================
    START SCREEN
@@ -349,7 +399,7 @@ body {
   color: black;
   border: 2px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.8px;
   margin-right: 10px;
@@ -358,6 +408,7 @@ body {
 }
 
 .map-clear:hover {
+  color: white;
   background: linear-gradient(135deg, #ff392b);
 }
 

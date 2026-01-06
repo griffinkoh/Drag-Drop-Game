@@ -1,23 +1,40 @@
-import { useDrop } from "react-dnd";
+import { useDrop, useDrag } from "react-dnd";
 import { Zone } from "../types";
+
+type DragItem = { label: string; fromZoneId?: string };
 
 type DropZoneProps = {
   zone: Zone;
   placedItem?: string;
   incorrect: boolean;
-  onDrop: (zoneId: string, itemId: string) => void;
+  correct: boolean; 
+  onDrop: (zoneId: string, itemId: string, fromZoneId?: string) => void;
 };
 
 export default function DropZone({
   zone,
   placedItem,
   incorrect,
+  correct,
   onDrop
 }: DropZoneProps) {
-  const [, drop] = useDrop(() => ({
-    accept: "OPTION",
-    drop: (item: { id: string; label: string }) => onDrop(zone.id, item.label)
-  }));
+  const [, drop] = useDrop<DragItem>(
+    () => ({
+      accept: "OPTION",
+      drop: item => onDrop(zone.id, item.label, item.fromZoneId)
+    }),
+    [zone.id, onDrop]
+  );
+
+  const [{ isDragging }, drag] = useDrag<DragItem, void, { isDragging: boolean }>(
+    () => ({
+      type: "OPTION",
+      item: placedItem ? { label: placedItem, fromZoneId: zone.id } : undefined,
+      canDrag: !!placedItem,
+      collect: monitor => ({ isDragging: monitor.isDragging() })
+    }),
+    [placedItem, zone.id]
+  );
 
   return (
     <div
@@ -33,7 +50,14 @@ export default function DropZone({
       }}
     >
       {placedItem && (
-        <div className={`zone-pill ${incorrect ? "zone-wrong" : ""}`}>
+        <div
+          key={placedItem}
+          ref={drag}
+          className={`zone-pill ${
+            incorrect ? "zone-wrong" : correct ? "zone-correct" : ""
+          }`}
+          style={{ opacity: isDragging ? 0.5 : 1 }}
+        >
           {placedItem}
         </div>
       )}

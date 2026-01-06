@@ -1,47 +1,74 @@
-
 import { useState } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import OptionsPanel from "./components/OptionsPanel";
 import MapCanvas from "./components/MapCanvas";
 import StartScreen from "./components/StartScreen";
 import ResultModal from "./components/ResultModal";
+import ReviewCanvas from "./components/ReviewCanvas"; 
 import { ANSWERS } from "./data/answers";
 import { useGameTimer } from "./hooks/useGameTimer";
 
 export default function App() {
   const [placements, setPlacements] = useState<Record<string, string>>({});
+  const usedLabels = Object.values(placements);
+
   const [running, setRunning] = useState(false);
   const [finished, setFinished] = useState(false);
   const [started, setStarted] = useState(false);
+
   const [penalty, setPenalty] = useState(0);
   const [incorrectZones, setIncorrectZones] = useState<string[]>([]);
+  const [correctZones, setCorrectZones] = useState<string[]>([]);
+
   const [timerKey, setTimerKey] = useState(0);
+
+  // review flow
+  const [reviewMode, setReviewMode] = useState(false);
+  const [showCorrect, setShowCorrect] = useState(false); // false=user snapshot, true=reveal correct
 
   const time = useGameTimer(running, timerKey);
 
-  const handleDrop = (zoneId: string, label: string) => {
-    setPlacements(prev => ({ ...prev, [zoneId]: label }));
+  const handleDrop = (targetZoneId: string, label: string, fromZoneId?: string) => {
+    setPlacements(prev => {
+      const next = { ...prev };
+
+      // move: remove from old zone
+      if (fromZoneId && fromZoneId !== targetZoneId) {
+        if (next[fromZoneId] === label) delete next[fromZoneId];
+      }
+
+      // place into target (replace allowed)
+      next[targetZoneId] = label;
+
+      return next;
+    });
+
+    // start timer on first placement
+    setRunning(prev => (prev ? prev : true));
+
+    // clear incorrect highlight if user changes that zone
+    setIncorrectZones(prev => prev.filter(z => z !== targetZoneId));
+    setCorrectZones(prev => prev.filter(z => z !== targetZoneId));
   };
 
   const handleStart = () => {
     setStarted(true);
-    setRunning(true);
+    setRunning(false); // start timer only after first drop
   };
 
   const handleFinish = () => {
     const wrong: string[] = [];
+    const correct: string[] = [];
 
     Object.entries(ANSWERS).forEach(([zone, ans]) => {
-      if (placements[zone] !== ans) {
-        wrong.push(zone);
-      }
+      if (placements[zone] === ans) correct.push(zone);
+      else wrong.push(zone);
     });
 
-    const penaltySeconds = wrong.length * 10; // per wrong answer
+    // optional if you re-enable penalty later:
+    setPenalty(wrong.length * 10);
 
-    setPenalty(penaltySeconds);
     setIncorrectZones(wrong);
+    setCorrectZones(correct); 
     setRunning(false);
     setFinished(true);
   };
@@ -49,40 +76,69 @@ export default function App() {
   const handleClear = () => {
     setPlacements({});
     setIncorrectZones([]);
+    setCorrectZones([]);
   };
 
-  const handleReset = () => {
+  const handleViewCorrect  = () => {
+    setReviewMode(true);
+    setShowCorrect(false); 
+  };
+
+  const handleRetry = () => {
     setPlacements({});
-    setPenalty(0);
     setIncorrectZones([]);
+    setCorrectZones([]);
     setFinished(false);
-    setStarted(false);
+    setReviewMode(false);
+    setShowCorrect(false);
+    setPenalty(0);
+    setRunning(false);
     setTimerKey(prev => prev + 1);
+  };
+
+  const handleToggleCorrect = () => {
+    setShowCorrect(prev => !prev);
   };
 
   if (!started) return <StartScreen onStart={handleStart} />;
 
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="game-root">
-        <OptionsPanel />
-        <MapCanvas
-          placements={placements}
-          incorrectZones={incorrectZones}
-          onDrop={handleDrop}
-          time={time}
-          onFinish={handleFinish}
-          onClear={handleClear}
-        />
+  if (reviewMode) {
+    return (
+      <ReviewCanvas
+        placements={placements}
+        showCorrect={showCorrect}
+        onToggleCorrect={handleToggleCorrect} 
+        onRetry={handleRetry}
+        time={time}
+        penalty={penalty}
+      />
+    );
+  }
 
-        {finished && (
-          <ResultModal
-            time={time}
-            penalty={penalty}
-            onReset={handleReset}
-          />
-        )}
-      </div>
-    </DndProvider>
+  // ✅ GAME PAGE
+  return (
+    <div className="game-root">
+      <OptionsPanel usedLabels={usedLabels} />
+
+      <MapCanvas
+        placements={placements}
+        incorrectZones={incorrectZones}
+        correctZones={correctZones} 
+        onDrop={handleDrop}
+        time={time}
+        onFinish={handleFinish}
+        onClear={handleClear}
+      />
+
+      {finished && (
+        <ResultModal
+          time={time}
+          penalty={penalty}
+          title="Exercise Completed"
+          actionLabel="View Correct Answers"
+          onAction={handleViewCorrect}
+        />
+      )}
+    </div>
   );
 }

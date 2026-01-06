@@ -5,7 +5,8 @@ import mapImage from "../assets/map.png";
 type Props = {
   placements: Record<string, string>;
   incorrectZones: string[];
-  onDrop: (zoneId: string, itemId: string) => void;
+  correctZones: string[]; 
+  onDrop: (zoneId: string, itemId: string, fromZoneId?: string) => void;
   time: number;
   onFinish: () => void;
   onClear: () => void;
@@ -14,6 +15,7 @@ type Props = {
 export default function MapCanvas({
   placements,
   incorrectZones,
+  correctZones, 
   onDrop,
   time,
   onFinish,
@@ -21,12 +23,11 @@ export default function MapCanvas({
 }: Props) {
   return (
     <section className="map-section">
-
       {/* TOP BAR */}
       <div className="map-header">
         <div className="map-timer">⏱ {time}s</div>
 
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "20px" }}>
           <button className="map-clear" onClick={onClear}>
             CLEAR
           </button>
@@ -48,14 +49,12 @@ export default function MapCanvas({
               zone={zone}
               placedItem={placements[zone.id]}
               incorrect={incorrectZones.includes(zone.id)}
+              correct={correctZones.includes(zone.id)}
               onDrop={onDrop}
             />
           ))}
         </div>
       </div>
-
     </section>
   );
 }
-
-
