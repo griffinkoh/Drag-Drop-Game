@@ -218,7 +218,7 @@ body {
 .zone-hitbox {
   background: transparent;
   pointer-events: auto;
-  outline: 2px dashed rgba(0,255,0,0.6);
+  /* outline: 2px dashed rgba(0,255,0,0.6); */
   z-index: 5;
   font-size: clamp(10px, .7vw, 14px);
 }

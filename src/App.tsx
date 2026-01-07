@@ -4,7 +4,7 @@ import MapCanvas from "./components/MapCanvas";
 import StartScreen from "./components/StartScreen";
 import ResultModal from "./components/ResultModal";
 import ReviewCanvas from "./components/ReviewCanvas"; 
-import { ANSWERS } from "./data/answers";
+import { ANSWERS } from "./data/mapData";
 import { useGameTimer } from "./hooks/useGameTimer";
 
 export default function App() {
@@ -115,7 +115,7 @@ export default function App() {
     );
   }
 
-  // ✅ GAME PAGE
+  // GAME PAGE
   return (
     <div className="game-root">
       <OptionsPanel usedLabels={usedLabels} />
