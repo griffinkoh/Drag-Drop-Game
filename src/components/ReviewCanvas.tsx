@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ZONES } from "../data/zones";
-import { ANSWERS } from "../data/answers";
+import { MAP_ZONES, ANSWERS } from "../data/mapData";
+
 import mapImage from "../assets/map.png";
 import ResultModal from "./ResultModal"; 
 type Props = {
@@ -50,7 +50,7 @@ export default function ReviewCanvas({
         <div className="map-frame">
           <img src={mapImage} className="map-image" draggable={false} />
 
-          {ZONES.map(zone => {
+          {MAP_ZONES.map(zone => {
             const userLabel = placements[zone.id];
             const correctLabel = (ANSWERS as Record<string, string>)[zone.id];
             const isCorrect = userLabel === correctLabel;

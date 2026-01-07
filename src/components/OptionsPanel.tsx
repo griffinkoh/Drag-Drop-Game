@@ -1,5 +1,5 @@
 import DraggableOption from "./DraggableOption";
-import { OPTIONS } from "../data/options";
+import {OPTIONS} from "../data/mapData";
 
 type Props = {
   usedLabels: string[];

@@ -1,5 +1,5 @@
 import DropZone from "./DropZone";
-import { ZONES } from "../data/zones";
+import { MAP_ZONES } from "../data/mapData";
 import mapImage from "../assets/map.png";
 
 type Props = {
@@ -43,7 +43,7 @@ export default function MapCanvas({
         <div className="map-frame">
           <img src={mapImage} className="map-image" draggable={false} />
 
-          {ZONES.map(zone => (
+          {MAP_ZONES.map(zone => (
             <DropZone
               key={zone.id}
               zone={zone}
